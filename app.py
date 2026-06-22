@@ -100,36 +100,7 @@ with c4:
 st.divider()
 
 # =====================================
-# NEGATIVE REVIEW CHART
-# =====================================
-
-st.header("📉 Negative Review Percentage by Company")
-
-fig1, ax1 = plt.subplots(figsize=(8,4))
-
-data["negative_rate"].plot(
-    kind="bar",
-    ax=ax1
-)
-
-ax1.set_ylabel("Percentage")
-ax1.set_title("Negative Review Percentage by Company")
-
-st.pyplot(fig1)
-
-# =====================================
-# COMPANY RATINGS TABLE
-# =====================================
-
-st.header("🏆 Company Ratings Comparison")
-
-st.dataframe(
-    data["company_ratings"],
-    use_container_width=True
-)
-
-# =====================================
-# COMPANY SELECTOR
+# COMPANY ANALYSIS
 # =====================================
 
 st.header("🏢 Company Analysis")
@@ -141,23 +112,59 @@ selected_company = st.selectbox(
     companies
 )
 
-st.subheader(f"Ratings for {selected_company.title()}")
-
 company_data = data["company_ratings"].loc[selected_company]
 
-fig2, ax2 = plt.subplots(figsize=(8,4))
+col1, col2 = st.columns(2)
 
-company_data.plot(
-    kind="bar",
-    ax=ax2
+# LEFT CHART
+
+with col1:
+
+    fig1, ax1 = plt.subplots(figsize=(4,3))
+
+    data["negative_rate"].plot(
+        kind="bar",
+        ax=ax1
+    )
+
+    ax1.set_title("Negative Review %")
+    ax1.set_ylabel("%")
+
+    plt.tight_layout()
+
+    st.pyplot(fig1)
+
+# RIGHT CHART
+
+with col2:
+
+    fig2, ax2 = plt.subplots(figsize=(4,3))
+
+    company_data.plot(
+        kind="bar",
+        ax=ax2
+    )
+
+    ax2.set_title(
+        f"{selected_company.title()} Ratings"
+    )
+
+    ax2.set_ylabel("Rating")
+
+    plt.tight_layout()
+
+    st.pyplot(fig2)
+
+# =====================================
+# COMPANY RATINGS TABLE
+# =====================================
+
+st.header("🏆 Company Ratings Comparison")
+
+st.dataframe(
+    data["company_ratings"],
+    use_container_width=True
 )
-
-ax2.set_ylabel("Rating")
-ax2.set_title(
-    f"{selected_company.title()} Employee Ratings"
-)
-
-st.pyplot(fig2)
 
 # =====================================
 # COMPLAINT THEMES
@@ -190,25 +197,20 @@ st.dataframe(
     use_container_width=True
 )
 
-fig3, ax3 = plt.subplots(figsize=(8,4))
+fig3, ax3 = plt.subplots(figsize=(4,3))
 
-data["correlation"].drop(
-    "overall-ratings"
-).plot(
-    kind="bar",
+data["correlation"].drop("overall-ratings").plot(
+    kind="pie",
+    autopct="%1.1f%%",
     ax=ax3
 )
 
-ax3.set_title(
-    "Drivers of Employee Satisfaction"
-)
+ax3.set_ylabel("")
+ax3.set_title("Drivers of Employee Satisfaction")
 
-ax3.set_ylabel(
-    "Correlation"
-)
+plt.tight_layout()
 
 st.pyplot(fig3)
-
 # =====================================
 # KEY INSIGHTS
 # =====================================
