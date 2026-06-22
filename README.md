@@ -14,7 +14,7 @@ The dashboard helps identify:
 
 ## Dashboard Preview
 
-![Dashboard Screenshot](Dashboard_home.png)
+![Dashboard Screenshot](screenshots/Dashboard_home.png)
 
 ## Technologies Used
 
